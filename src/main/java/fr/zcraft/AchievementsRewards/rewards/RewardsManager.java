@@ -118,7 +118,7 @@ public class RewardsManager
                 RawMessage.send(player,
                         new RawText("- ")
                                 .color(ChatColor.DARK_GRAY)
-                            .then(String.valueOf(Math.rint(reward.getHealth())))
+                            .then(String.valueOf((int) reward.getHealth()))
                                 .color(ChatColor.DARK_AQUA)
                             .then(" point" + (reward.getHealth() > 1 ? "s" : "") + " de vie")
                                 .color(ChatColor.AQUA)
@@ -131,7 +131,7 @@ public class RewardsManager
                 RawMessage.send(player,
                         new RawText("- ")
                                 .color(ChatColor.DARK_GRAY)
-                            .then(String.valueOf(Math.rint(reward.getXpLevels())))
+                            .then(String.valueOf(reward.getXpLevels()))
                                 .color(ChatColor.DARK_AQUA)
                             .then(" niveau" + (reward.getHealth() > 1 ? "x" : "") + " d'XP")
                                 .color(ChatColor.AQUA)
@@ -146,7 +146,7 @@ public class RewardsManager
                                 .color(ChatColor.DARK_GRAY)
                             .then(String.valueOf(item.getAmount()) + " × ")
                                 .color(ChatColor.DARK_AQUA)
-                            .then(StringUtils.capitalize(item.getType().toString().replace("_", " ")))
+                            .then(StringUtils.capitalize(item.getType().toString().toLowerCase().replace("_", " ")))
                                 .color(ChatColor.AQUA)
                                 .hover(item)
                         .build()
@@ -155,8 +155,6 @@ public class RewardsManager
 
             RawMessage.send(player,
                     new RawText("")
-                        .then("|")
-                            .style(ChatColor.DARK_GREEN, ChatColor.BOLD, ChatColor.MAGIC)
                         .then("»» ")
                             .style(ChatColor.DARK_GREEN, ChatColor.BOLD)
                         .then("Cliquez ici pour récupérer votre récompense")
@@ -165,8 +163,6 @@ public class RewardsManager
                             .command(ARGetCommand.class, achievement.name())
                         .then(" ««")
                             .style(ChatColor.DARK_GREEN, ChatColor.BOLD)
-                        .then("|")
-                            .style(ChatColor.DARK_GREEN, ChatColor.BOLD, ChatColor.MAGIC)
                     .build()
             );
 

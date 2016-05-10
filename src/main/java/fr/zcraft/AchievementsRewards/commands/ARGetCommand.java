@@ -59,9 +59,14 @@ public class ARGetCommand extends Command
             error("Vous n'avez pas encore le succès " + achievement.name().replace("_", " ") + ".");
 
         if (AchievementsRewards.get().getRewardsManager().give(achievement, player))
-            success("Vous avez reçu vos gains ; regardez au sol si votre inventaire est plein.");
+        {
+            success("Vous avez reçu vos gains.");
+            info("Regardez au sol, si votre inventaire est plein.");
+        }
         else
+        {
             error("Vous ne pouvez recevoir la récompense qu'une fois.");
+        }
     }
 
     @Override

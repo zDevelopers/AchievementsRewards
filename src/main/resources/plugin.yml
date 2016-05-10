@@ -1,0 +1,10 @@
+name: AchievementsRewards
+version: 1.0-SNAPSHOT
+main: fr.zcraft.AchievementsRewards.AchievementsRewards
+
+description: Gives rewards for achievements
+author: Amaury Carrade & ProkopyL
+
+commands:
+    ar:
+        description: "Achievements rewards base command"

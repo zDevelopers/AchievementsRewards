@@ -29,20 +29,28 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL-B license and that you accept its terms.
  */
+
 package fr.zcraft.AchievementsRewards;
 
-import fr.zcraft.zlib.core.ZLibComponent;
-import fr.zcraft.zlib.tools.runners.RunTask;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerAchievementAwardedEvent;
+import fr.zcraft.zlib.components.configuration.Configuration;
+import fr.zcraft.zlib.components.configuration.ConfigurationItem;
+import fr.zcraft.zlib.components.configuration.ConfigurationMap;
+import fr.zcraft.zlib.components.configuration.ConfigurationSection;
+import static fr.zcraft.zlib.components.configuration.ConfigurationItem.item;
+import static fr.zcraft.zlib.components.configuration.ConfigurationItem.list;
+import static fr.zcraft.zlib.components.configuration.ConfigurationItem.map;
+import fr.zcraft.zlib.components.configuration.ConfigurationList;
+import org.bukkit.Achievement;
+import org.bukkit.inventory.ItemStack;
 
-
-public class AchievementsListener extends ZLibComponent implements Listener
+public class ARConfig extends Configuration
 {
-    @EventHandler
-    public void onAchievementAwarded(PlayerAchievementAwardedEvent ev)
+    static public final ConfigurationMap<Achievement, RewardSection> REWARDS = map("rewards", Achievement.class, RewardSection.class);
+            
+    static public class RewardSection extends ConfigurationSection
     {
-        RunTask.nextTick(() -> AchievementsRewards.get().getRewardsManager().preGive(ev.getAchievement(), ev.getPlayer()));
+        public final ConfigurationList<ItemStack> ITEMS = list("items", ItemStack.class);
+        public final ConfigurationItem<Integer> EXPERIENCE_LEVELS = item("levels", 0);
+        public final ConfigurationItem<Double> HEALTH = item("health", .0);
     }
 }

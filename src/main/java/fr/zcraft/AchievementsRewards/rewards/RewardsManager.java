@@ -31,10 +31,13 @@
  */
 package fr.zcraft.AchievementsRewards.rewards;
 
+import fr.zcraft.AchievementsRewards.ARConfig;
 import fr.zcraft.AchievementsRewards.commands.ARGetCommand;
 import fr.zcraft.zlib.components.rawtext.RawText;
+import fr.zcraft.zlib.core.ZLibComponent;
+import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.RawMessage;
-import org.apache.commons.lang.StringUtils;
+import java.util.EnumMap;
 import org.bukkit.Achievement;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -43,17 +46,19 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 
-
-public class RewardsManager
+public class RewardsManager  extends ZLibComponent implements Listener
 {
     private static final String CHAT_SEPARATOR = ChatColor.GRAY + "-----------------------------------------------------";
 
-
-    private Map<Achievement, Reward> rewards = new HashMap<>();
-    private Map<UUID, Set<Achievement>> rewarded = new HashMap<>();
+    private final Map<Achievement, Reward> rewards = new EnumMap<>(Achievement.class);
+    private final Map<UUID, Set<Achievement>> rewarded = new HashMap<>();
 
 
     public RewardsManager register(Achievement achievement, Reward reward)
@@ -98,7 +103,7 @@ public class RewardsManager
         {
             player.giveExpLevels(reward.getXpLevels());
         }
-
+        
         if (reward.getHealth() > 0 || reward.getXpLevels() > 0 || !reward.getItems().isEmpty())
         {
             player.sendMessage(CHAT_SEPARATOR);
@@ -146,7 +151,8 @@ public class RewardsManager
                                 .color(ChatColor.DARK_GRAY)
                             .then(String.valueOf(item.getAmount()) + " × ")
                                 .color(ChatColor.DARK_AQUA)
-                            .then(StringUtils.capitalize(item.getType().toString().toLowerCase().replace("_", " ")))
+                            .then()
+                                .translate(item)
                                 .color(ChatColor.AQUA)
                                 .hover(item)
                         .build()
@@ -198,5 +204,20 @@ public class RewardsManager
             player.getWorld().dropItem(player.getLocation(), item);
 
         return true;
+    }
+    
+    @Override
+    protected void onEnable()
+    {
+        for(Entry<Achievement, ARConfig.RewardSection> entry : ARConfig.REWARDS)
+        {
+            register(entry.getKey(), new Reward(entry.getValue()));
+        }
+    }
+    
+    @EventHandler
+    public void onAchievementAwarded(PlayerAchievementAwardedEvent ev)
+    {
+        RunTask.nextTick(() -> preGive(ev.getAchievement(), ev.getPlayer()));
     }
 }

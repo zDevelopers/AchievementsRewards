@@ -53,19 +53,14 @@ public class AchievementsRewards extends ZPlugin
     {
         instance = this;
 
-        loadComponents(Commands.class, AchievementsListener.class);
+        saveDefaultConfig();
+        
+        loadComponents(Commands.class, ARConfig.class);
 
         Commands.register("ar", ARGetCommand.class);
 
-        rewardsManager = new RewardsManager();
+        rewardsManager = loadComponent(RewardsManager.class);
 
-        rewardsManager
-                .register(Achievement.OPEN_INVENTORY, new Reward(
-                        15, 25,
-                        new ItemStackBuilder(Material.DEAD_BUSH)
-                            .lore(ChatColor.GRAY + "Hey, what did you expect?")
-                        .item()
-                ));
     }
 
     public RewardsManager getRewardsManager()

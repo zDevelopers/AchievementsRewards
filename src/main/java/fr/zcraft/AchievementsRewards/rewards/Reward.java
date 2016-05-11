@@ -31,6 +31,7 @@
  */
 package fr.zcraft.AchievementsRewards.rewards;
 
+import fr.zcraft.AchievementsRewards.ARConfig;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -39,10 +40,17 @@ import java.util.List;
 
 public class Reward
 {
-    private int xpLevels;
-    private double health;
-    private List<ItemStack> items;
+    private final int xpLevels;
+    private final double health;
+    private final List<ItemStack> items;
 
+    public Reward(ARConfig.RewardSection rewardSection)
+    {
+        this.xpLevels = rewardSection.EXPERIENCE_LEVELS.get();
+        this.health = rewardSection.HEALTH.get();
+        this.items = rewardSection.ITEMS.get();
+    }
+    
     public Reward(int xpLevels, double health, ItemStack... items)
     {
         this.xpLevels = xpLevels;

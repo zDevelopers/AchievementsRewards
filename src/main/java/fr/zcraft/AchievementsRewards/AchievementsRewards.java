@@ -32,14 +32,9 @@
 package fr.zcraft.AchievementsRewards;
 
 import fr.zcraft.AchievementsRewards.commands.ARGetCommand;
-import fr.zcraft.AchievementsRewards.rewards.Reward;
 import fr.zcraft.AchievementsRewards.rewards.RewardsManager;
 import fr.zcraft.zlib.components.commands.Commands;
 import fr.zcraft.zlib.core.ZPlugin;
-import fr.zcraft.zlib.tools.items.ItemStackBuilder;
-import org.bukkit.Achievement;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 
 
 public class AchievementsRewards extends ZPlugin

@@ -34,14 +34,13 @@ package fr.zcraft.AchievementsRewards;
 
 import fr.zcraft.zlib.components.configuration.Configuration;
 import fr.zcraft.zlib.components.configuration.ConfigurationItem;
+import fr.zcraft.zlib.components.configuration.ConfigurationList;
 import fr.zcraft.zlib.components.configuration.ConfigurationMap;
 import fr.zcraft.zlib.components.configuration.ConfigurationSection;
-import static fr.zcraft.zlib.components.configuration.ConfigurationItem.item;
-import static fr.zcraft.zlib.components.configuration.ConfigurationItem.list;
-import static fr.zcraft.zlib.components.configuration.ConfigurationItem.map;
-import fr.zcraft.zlib.components.configuration.ConfigurationList;
 import org.bukkit.Achievement;
 import org.bukkit.inventory.ItemStack;
+
+import static fr.zcraft.zlib.components.configuration.ConfigurationItem.map;
 
 public class ARConfig extends Configuration
 {

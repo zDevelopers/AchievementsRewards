@@ -1,2 +1,277 @@
+# The key is the name of an achievements.
+# For the value, use the default config as an example. The types of the items are Bukkit names (see below).
+# Same for the enchantments and potion effects.
+#
+# ##  Links  ##
+#
+# - Achievements: https://hub.spigotmc.org/javadocs/bukkit/index.html?org/bukkit/Achievement.html
+# - Items types: https://hub.spigotmc.org/javadocs/bukkit/index.html?org/bukkit/Material.html
+# - Enchantments types: https://hub.spigotmc.org/javadocs/bukkit/index.html?org/bukkit/enchantments/Enchantment.html
+# - Potion effect types: https://hub.spigotmc.org/javadocs/bukkit/index.html?org/bukkit/potion/PotionEffectType.html
+
+
 rewards:
-    
+    OPEN_INVENTORY:
+        levels: 0
+        health: 0
+        items:
+            - type: dead_bush
+              title: §rWhat did you expect?
+              lore:
+                  - §7Schwaps
+
+    MINE_WOOD:
+        levels: 0
+        health: 0
+        items:
+            -
+
+    BUILD_WORKBENCH:
+        levels: 0
+        health: 0
+        items:
+            -
+
+    BUILD_PICKAXE:
+        levels: 0
+        health: 0
+        items:
+            - type: torch
+              amount: 8
+
+    BUILD_FURNACE:
+        levels: 0
+        health: 0
+        items:
+            -
+
+    ACQUIRE_IRON:
+        levels: 0
+        health: 0
+        items:
+            -
+
+    BUILD_HOE:
+        levels: 0
+        health: 0
+        items:
+            - type: chorus_fruit
+              amount: 21
+
+    MAKE_BREAD:
+        levels: 0
+        health: 2
+        items:
+            -
+
+    BAKE_CAKE:
+        levels: 0
+        health: 4
+        items:
+            -
+        message: §7<GlaDOS> §oYou monster...
+
+    BUILD_BETTER_PICKAXE:
+        levels: 0
+        health: 0
+        items:
+            -
+
+    COOK_FISH:
+        levels: 0
+        health: 0
+        items:
+            - type: fishing_rod
+              enchantments:
+                  luck: 2
+                  durability: 3
+                  arrow_knockback: 2
+            - type: cooked_fish
+              data: 1
+              amount: 8
+
+    ON_A_RAIL:
+        levels: 0
+        health: 0
+        items:
+            - type: potion
+              effect: speed
+              level: 2
+
+    BUILD_SWORD:
+        levels: 0
+        health: 0
+        items:
+            -
+
+    KILL_ENEMY:
+        levels: 0
+        health: 0
+        items:
+            -
+
+    KILL_COW:
+        levels: 0
+        health: 0
+        items:
+            -
+
+    FLY_PIG:
+        levels: 0
+        health: 9
+        items:
+            -
+
+    SNIPE_SKELETON:
+        levels: 0
+        health: 0
+        items:
+            - type: arrow
+              amount: 16
+            - type: spectral_arrow
+              amount: 8
+
+    GET_DIAMONDS:
+        levels: 0
+        health: 0
+        items:
+            - type: leather
+
+    NETHER_PORTAL:
+        levels: 3
+        health: 0
+        items:
+            -
+
+    GHAST_RETURN:
+        levels: 0
+        health: 0
+        items:
+            - type: bow
+              enchantments:
+                  arrow_knockback: 2
+            - type: ender_pearl
+              amount: 2
+
+    GET_BLAZE_ROD:
+        levels: 0
+        health: 0
+        items:
+            - type: flint_and_steel
+              title: §rLe briquet de Laurie
+              lore:
+                  - §7A une odeur de moustache
+                  - §7grillée...
+
+    BREW_POTION:
+        levels: 0
+        health: 0
+        items:
+            - type: water_bucket
+
+    END_PORTAL:
+        levels: 0
+        health: 0
+        items:
+            - type: diamond_helmet
+              enchantments:
+                  protection_environmental: 3
+            - type: diamond_chestplate
+              enchantments:
+                  protection_environmental: 3
+            - type: diamond_leggings
+              enchantments:
+                  protection_environmental: 3
+            - type: diamond_boots
+              enchantments:
+                  protection_environmental: 3
+
+    THE_END:
+        levels: 0
+        health: 0
+        items:
+            - type: diamond_sword
+              enchantments:
+                  damage_all: 5
+                  fire_aspect: 2
+                  knockback: 2
+
+    ENCHANTMENTS:
+        levels: 0
+        health: 0
+        items:
+            - type: ink_sack
+              data: 4
+              amount: 8
+
+    OVERKILL:
+        levels: 0
+        health: 0
+        items:
+            - type: golden_apple
+            - type: tnt
+              amount: 15
+
+    BOOKCASE:
+        levels: 0
+        health: 0
+        items:
+            - type: bookshelf
+              amount: 2
+            - type: enchanted_book
+              enchantments:
+                  loot_bonus_blocks: 2
+
+    EXPLORE_ALL_BIOMES:
+        levels: 40
+        health: 6
+        items:
+            - type: cooked_beef
+              amount: 64
+
+    SPAWN_WITHER:
+        levels: 0
+        health: 20
+        items:
+            - type: potion
+              effect: regen
+              extended: true
+
+    KILL_WITHER:
+        levels: 0
+        health: 0
+        items:
+            - type: golden_apple
+              data: 1
+
+    FULL_BEACON:
+        levels: 30
+        health: 0
+        items:
+            -
+
+    BREED_COW:
+        levels: 0
+        health: 0
+        items:
+            - type: raw_beef
+              amount: 16
+
+    DIAMONDS_TO_YOU:
+        levels: 0
+        health: 0
+        items:
+            - type: gold_ingot
+              amount: 2
+              title: §rCoupaing !
+
+    OVERPOWERED:
+        levels: 0
+        health: 0
+        items:
+            - type: diamond_pickaxe
+              amount: 2
+              enchantments:
+                  dig_speed: 5
+                  knockback: 2
+                  loot_bonus_blocks: 3

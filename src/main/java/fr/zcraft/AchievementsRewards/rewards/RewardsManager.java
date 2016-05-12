@@ -33,25 +33,28 @@ package fr.zcraft.AchievementsRewards.rewards;
 
 import fr.zcraft.AchievementsRewards.ARConfig;
 import fr.zcraft.AchievementsRewards.commands.ARGetCommand;
+import fr.zcraft.AchievementsRewards.utils.InventoryUtils;
 import fr.zcraft.zlib.components.rawtext.RawText;
 import fr.zcraft.zlib.core.ZLibComponent;
+import fr.zcraft.zlib.tools.items.ItemUtils;
 import fr.zcraft.zlib.tools.runners.RunTask;
 import fr.zcraft.zlib.tools.text.RawMessage;
-import java.util.EnumMap;
 import org.bukkit.Achievement;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 
 public class RewardsManager  extends ZLibComponent implements Listener
 {
@@ -88,11 +91,13 @@ public class RewardsManager  extends ZLibComponent implements Listener
         Reward reward = getForAchievement(achievement);
 
         if (reward == null
-                || !player.hasAchievement(achievement)
-                || rewarded.containsKey(player.getUniqueId()) && rewarded.get(player.getUniqueId()).contains(achievement))
+                || cannotReceive(achievement, player)
+                || (Math.abs(reward.getHealth()) < 0.4 && reward.getXpLevels() == 0 && reward.getItems().size() == 0))
         {
             return;
         }
+
+        final boolean fitInInventory = InventoryUtils.fitInInventory(player, reward.getItems());
 
         if (reward.getHealth() > 0)
         {
@@ -103,9 +108,18 @@ public class RewardsManager  extends ZLibComponent implements Listener
         {
             player.giveExpLevels(reward.getXpLevels());
         }
-        
+
+        if (fitInInventory)
+        {
+            reward.getItems().forEach(item -> ItemUtils.give(player, item));
+            markAwarded(achievement, player);
+        }
+
+
         if (reward.getHealth() > 0 || reward.getXpLevels() > 0 || !reward.getItems().isEmpty())
         {
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 1, 2.5f);
+
             player.sendMessage(CHAT_SEPARATOR);
 
             RawMessage.send(player,
@@ -117,6 +131,8 @@ public class RewardsManager  extends ZLibComponent implements Listener
                             .color(ChatColor.GREEN)
                     .build()
             );
+
+            player.sendMessage("");
 
             if (reward.getHealth() > 0)
             {
@@ -159,45 +175,58 @@ public class RewardsManager  extends ZLibComponent implements Listener
                 );
             }
 
-            RawMessage.send(player,
-                    new RawText("")
-                        .then("»» ")
-                            .style(ChatColor.DARK_GREEN, ChatColor.BOLD)
-                        .then("Cliquez ici pour récupérer votre récompense")
-                            .style(ChatColor.GREEN, ChatColor.BOLD)
-                            .hover(new RawText("Vous recevrez vos gains dans l'inventaire, ou au sol"))
-                            .command(ARGetCommand.class, achievement.name())
-                        .then(" ««")
-                            .style(ChatColor.DARK_GREEN, ChatColor.BOLD)
-                    .build()
-            );
-
             player.sendMessage(CHAT_SEPARATOR);
+
+            if (!fitInInventory)
+            {
+                RunTask.later(() -> {
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 1, 0.2f);
+
+                    RawMessage.send(player,
+                            new RawText("")
+                                .then("Attention")
+                                    .style(ChatColor.BOLD, ChatColor.RED)
+                                .then(", votre inventaire est trop plein pour tout recevoir.")
+                                    .color(ChatColor.RED)
+                            .build()
+                    );
+
+                    RawMessage.send(player,
+                            new RawText("")
+                                .then("»» ")
+                                    .style(ChatColor.DARK_GREEN, ChatColor.BOLD)
+                                .then("Cliquez ici pour récupérer votre récompense")
+                                    .style(ChatColor.GREEN, ChatColor.BOLD)
+                                    .hover(new RawText("Vous recevrez vos gains dans l'inventaire, ou au sol"))
+                                    .command(ARGetCommand.class, achievement.name())
+                                .then(" ««")
+                                    .style(ChatColor.DARK_GREEN, ChatColor.BOLD)
+                            .build()
+                    );
+
+                    player.sendMessage(CHAT_SEPARATOR);
+                }, 10l);
+            }
         }
     }
 
     /**
-     * Gives the reward items to a player.
+     * Gives the reward items to a player, if it does not fit in the inventory
+     * before. Used through a command.
      *
      * @param achievement The achievement.
      * @param player The player.
      */
-    public boolean give(Achievement achievement, Player player)
+    public boolean giveOnClick(Achievement achievement, Player player)
     {
         final Reward reward = getForAchievement(achievement);
-        final UUID uuid = player.getUniqueId();
 
-        if (reward == null
-                || !player.hasAchievement(achievement)
-                || rewarded.containsKey(uuid) && rewarded.get(uuid).contains(achievement))
+        if (reward == null || cannotReceive(achievement, player))
         {
             return false;
         }
 
-        if (!rewarded.containsKey(uuid))
-            rewarded.put(uuid, new HashSet<>());
-
-        rewarded.get(uuid).add(achievement);
+        markAwarded(achievement, player);
 
         Map<Integer, ItemStack> notAdded = player.getInventory().addItem(reward.getItems().toArray(new ItemStack[reward.getItems().size()]));
         for (ItemStack item : notAdded.values())
@@ -205,7 +234,22 @@ public class RewardsManager  extends ZLibComponent implements Listener
 
         return true;
     }
-    
+
+    private boolean cannotReceive(Achievement achievement, Player player)
+    {
+        return !player.hasAchievement(achievement)
+            || rewarded.containsKey(player.getUniqueId()) && rewarded.get(player.getUniqueId()).contains(achievement);
+    }
+
+    private void markAwarded(Achievement achievement, Player player)
+    {
+        if (!rewarded.containsKey(player.getUniqueId()))
+            rewarded.put(player.getUniqueId(), new HashSet<>());
+
+        rewarded.get(player.getUniqueId()).add(achievement);
+    }
+
+
     @Override
     protected void onEnable()
     {

@@ -58,7 +58,7 @@ public class ARGetCommand extends Command
         if (!player.hasAchievement(achievement))
             error("Vous n'avez pas encore le succès " + achievement.name().replace("_", " ") + ".");
 
-        if (AchievementsRewards.get().getRewardsManager().give(achievement, player))
+        if (AchievementsRewards.get().getRewardsManager().giveOnClick(achievement, player))
         {
             success("Vous avez reçu vos gains.");
             info("Regardez au sol, si votre inventaire est plein.");

@@ -51,5 +51,6 @@ public class ARConfig extends Configuration
         public final ConfigurationList<ItemStack> ITEMS = list("items", ItemStack.class);
         public final ConfigurationItem<Integer> EXPERIENCE_LEVELS = item("levels", 0);
         public final ConfigurationItem<Double> HEALTH = item("health", .0);
+        public final ConfigurationItem<String> MESSAGE = item("message", "");
     }
 }

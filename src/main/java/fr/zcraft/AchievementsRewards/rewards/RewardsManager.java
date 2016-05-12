@@ -176,6 +176,13 @@ public class RewardsManager  extends ZLibComponent implements Listener
             }
 
             player.sendMessage(CHAT_SEPARATOR);
+            
+            if(!reward.getMessage().isEmpty())
+            {
+                RunTask.later(() -> {
+                    player.sendMessage(reward.getMessage());
+                }, 5);
+            }
 
             if (!fitInInventory)
             {
